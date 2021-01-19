@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  web:
+    depends_on:
+      - db
+      - cache
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/code
+    environment:
+      FLASK_ENV: development
+  db:
+    image: postgres:latest
+    command: postgres -c 'shared_buffers=400MB' -c 'max_connections=100'
+    env_file:
+      - env-postgres.env
+    ports:
+      - 5432:5432
+  cache:
+    image: "redis:alpine"
+
